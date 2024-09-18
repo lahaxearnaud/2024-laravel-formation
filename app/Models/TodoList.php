@@ -15,6 +15,12 @@ class TodoList extends Model
     /** @use HasFactory<TodoListFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'user_id'
+    ];
+
+
     /**
      * @return HasMany<Todo>
      */
