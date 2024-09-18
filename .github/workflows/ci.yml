@@ -1,0 +1,75 @@
+name: CI
+
+on: [ push ]
+
+env:
+    APP_ENV: test
+
+jobs:
+    tests:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        env:
+            PHPSTAN_LEVEL: 8
+        strategy:
+            matrix:
+                php-version: [ "8.2" ]
+                node-version: [ "20" ]
+        steps:
+            # ###
+            # CLONE INSTALL PHP
+            # ###
+            -   uses: actions/checkout@v4
+            -   name: "Setup PHP"
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    extensions: pcov, :php-psr
+                    ini-values: date.timezone=Europe/Paris
+                env:
+                    fail-fast: true
+            -   name: "Load .env.test"
+                uses: c-py/action-dotenv-to-setenv@v5
+                with:
+                    env-file: .env.test
+            -   name: "Install php deps"
+                uses: php-actions/composer@v6
+                with:
+                    php_version: ${{ matrix.php-version }}
+                    php_extensions: pcov
+                    version: 2
+                    dev: yes
+                    args: --no-interaction --no-progress --prefer-dist --no-scripts
+
+            # ###
+            # YARN INSTALL && BUILD
+            # ###
+            -   name: "setup node"
+                uses: actions/setup-node@v4.0.2
+                with:
+                    node-version: ${{ matrix.node-version }}
+                env:
+                    ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+            -   name: "Install yarn packages"
+                run: yarn install -s
+            -   name: "Build assets"
+                run: yarn run build
+
+            # ###
+            # UNIT TESTS
+            # ###
+            -   name: "Create DB tables"
+                run: php artisan migrate --seed
+            -   name: "Run phpunit"
+                run: php artisan test
+            # ###
+            # QA
+            # ###
+            -   name: "Run Phpstan"
+                uses: php-actions/phpstan@v3.0.2
+                with:
+                    path: src
+                    memory_limit: 1G
+                    level: ${{ env.PHPSTAN_LEVEL }}
+                    php_version: ${{ matrix.php-version }}
+                    args: "--no-progress -n"
