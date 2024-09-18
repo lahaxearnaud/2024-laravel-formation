@@ -11,7 +11,7 @@
     <body>
         <div class="bg-white">
             <div class="mx-auto max-w-7xl px-6 py-8">
-                <div id="app"></div>
+                <div id="app" data-token="{{ $userToken ?? ''}}"></div>
             </div>
         </div>
 
