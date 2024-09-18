@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\Todo;
@@ -8,7 +10,8 @@ use Illuminate\Support\Facades\Http;
 
 class ScrapeTodos extends Command
 {
-    const HTTPS_JSONPLACEHOLDER_TYPICODE_COM_TODOS = 'https://jsonplaceholder.typicode.com/todos';
+    private const HTTPS_JSONPLACEHOLDER_TYPICODE_COM_TODOS = 'https://jsonplaceholder.typicode.com/todos';
+
     /**
      * The name and signature of the console command.
      *

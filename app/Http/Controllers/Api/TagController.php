@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 

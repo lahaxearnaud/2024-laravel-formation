@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Models\Todo;
-use App\Models\TodoList;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTodoRequest extends FormRequest

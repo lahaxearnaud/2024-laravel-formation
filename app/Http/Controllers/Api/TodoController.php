@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+declare(strict_types=1);
 
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Todo;
 use App\Models\TodoList;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +19,7 @@ class TodoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(TodoList $todoList)
+    public function index(TodoList $todoList): JsonResponse
     {
         if (!Gate::allows('view', $todoList)) {
             abort(Response::HTTP_FORBIDDEN);
@@ -33,7 +37,7 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTodoRequest $request, TodoList $todoList)
+    public function store(StoreTodoRequest $request, TodoList $todoList): JsonResponse
     {
         $validated = $request->validated();
 
@@ -48,16 +52,18 @@ class TodoController extends Controller
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
-            return response(
-                status: Response::HTTP_NOT_ACCEPTABLE
-            );
+            return response()
+                ->json(
+                    null,
+                    status: Response::HTTP_NOT_ACCEPTABLE
+                );
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TodoList $todoList, Todo $todo)
+    public function show(TodoList $todoList, Todo $todo): JsonResponse
     {
         if (!Gate::allows('view', $todo)) {
 
@@ -72,7 +78,7 @@ class TodoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTodoRequest $request, TodoList $todoList, Todo $todo)
+    public function update(UpdateTodoRequest $request, TodoList $todoList, Todo $todo): JsonResponse
     {
         if (!Gate::allows('update', $todo)) {
             abort(Response::HTTP_FORBIDDEN);
@@ -92,17 +98,18 @@ class TodoController extends Controller
             );
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
-            return response(
-                $th->getMessage(),
-                status: Response::HTTP_NOT_ACCEPTABLE
-            );
+            return response()
+                ->json(
+                    $th->getMessage(),
+                    status: Response::HTTP_NOT_ACCEPTABLE
+                );
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TodoList $todoList, Todo $todo)
+    public function destroy(TodoList $todoList, Todo $todo): JsonResponse
     {
         if (!Gate::allows('delete', $todo)) {
             abort(Response::HTTP_FORBIDDEN);

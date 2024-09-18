@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\TagController;
+use App\Http\Controllers\Api\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,6 +9,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
     Route::get('tags', [TagController::class, 'index']);
-    Route::resource('todo-lists', \App\Http\Controllers\TodoListController::class);
-    Route::resource('todo-lists/{todoList}/todos', \App\Http\Controllers\TodoController::class);
+    Route::resource('todo-lists', \App\Http\Controllers\Api\TodoListController::class);
+    Route::resource('todo-lists/{todoList}/todos', \App\Http\Controllers\Api\TodoController::class);
 });

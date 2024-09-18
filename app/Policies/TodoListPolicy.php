@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\TodoList;
@@ -21,7 +23,7 @@ class TodoListPolicy
      */
     public function view(User $user, TodoList $todoList): bool
     {
-        return $user->id === $todoList->user->id;
+        return $user->id === $todoList->user?->id;
     }
 
     /**
@@ -37,7 +39,7 @@ class TodoListPolicy
      */
     public function update(User $user, TodoList $todoList): bool
     {
-        return $user->id === $todoList->user->id;
+        return $user->id === $todoList->user?->id;
     }
 
     /**
@@ -45,7 +47,7 @@ class TodoListPolicy
      */
     public function delete(User $user, TodoList $todoList): bool
     {
-        return $user->id === $todoList->user->id;
+        return $user->id === $todoList->user?->id;
     }
 
     /**
@@ -53,7 +55,7 @@ class TodoListPolicy
      */
     public function restore(User $user, TodoList $todoList): bool
     {
-        return $user->id === $todoList->user->id;
+        return $user->id === $todoList->user?->id;
     }
 
     /**
@@ -61,6 +63,6 @@ class TodoListPolicy
      */
     public function forceDelete(User $user, TodoList $todoList): bool
     {
-        return $user->id === $todoList->user->id;
+        return $user->id === $todoList->user?->id;
     }
 }

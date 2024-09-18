@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Models\Todo;
@@ -20,7 +22,7 @@ class TodoPolicy
      */
     public function view(User $user, Todo $todo): bool
     {
-        return $user->id === $todo->todoList->user->id;
+        return $user->id === $todo->todoList?->user?->id;
     }
 
     /**
@@ -36,7 +38,7 @@ class TodoPolicy
      */
     public function update(User $user, Todo $todo): bool
     {
-        return $user->id === $todo->todoList->user->id;
+        return $user->id === $todo->todoList?->user?->id;
     }
 
     /**
@@ -44,7 +46,7 @@ class TodoPolicy
      */
     public function delete(User $user, Todo $todo): bool
     {
-        return $user->id === $todo->todoList->user->id;
+        return $user->id === $todo->todoList?->user?->id;
     }
 
     /**
@@ -52,7 +54,7 @@ class TodoPolicy
      */
     public function restore(User $user, Todo $todo): bool
     {
-        return $user->id === $todo->todoList->user->id;
+        return $user->id === $todo->todoList?->user?->id;
     }
 
     /**
@@ -60,6 +62,6 @@ class TodoPolicy
      */
     public function forceDelete(User $user, Todo $todo): bool
     {
-        return $user->id === $todo->todoList->user->id;
+        return $user->id === $todo->todoList?->user?->id;
     }
 }
